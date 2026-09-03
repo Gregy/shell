@@ -637,9 +637,17 @@ export class Ext extends Ecs.System<ExtEvent> {
             break;
         }
 
+        const last_index = wom.get_n_workspaces() - 1;
+
+        if (!this.settings.dynamic_workspaces()) {
+            if (id > last_index) id = last_index;
+
+            return [id, wom.get_workspace_by_index(id)];
+        }
+
         let new_work;
 
-        if (id + 1 === wom.get_n_workspaces()) {
+        if (id === last_index) {
             id += 1;
             new_work = wom.append_new_workspace(true, global.get_current_time());
         } else {
